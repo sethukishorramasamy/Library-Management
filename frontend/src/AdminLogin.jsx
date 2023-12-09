@@ -78,10 +78,6 @@ function AdminLogin() {
                                 </Form.Group>
 
                                 {/* Password Input */}
-                                {/* <Form.Group className="mb-3" controlId="user_password">
-                                    <Form.Label>Password <span className={styles.requiredfield}> *</span></Form.Label>
-                                    <Form.Control type="password" placeholder="Enter Password" required />
-                                </Form.Group> */}
                                 <Form.Group className="mb-3" controlId="user_password">
                                     <Form.Label>Password <span className={styles.requiredfield}> *</span></Form.Label>
                                     <Form.Control

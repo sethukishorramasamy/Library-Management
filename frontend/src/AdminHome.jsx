@@ -1,3 +1,4 @@
+// imports
 import Container from 'react-bootstrap/Container';
 import Form from 'react-bootstrap/Form';
 import Nav from 'react-bootstrap/Nav';
@@ -16,6 +17,7 @@ import Modal from 'react-bootstrap/Modal';
 
 function AdminHome() {
 
+    // declarations
     const [bookItems, setBookItems] = useState([]);
     const [filteredBookItems, setFilteredBookItems] = useState([]);
     const [patronItems, setPatronItems] = useState([]);
@@ -25,6 +27,7 @@ function AdminHome() {
     const [bookDeleted, setBookDeleted] = useState(true);
     const [patronDeleted, setPatronDeleted] = useState(true);
 
+    // declarations - edit book details
     const [showEditModal, setShowEditModal] = useState(false);
     const [editedBookName, setEditedBookName] = useState('');
     const [editedAuthor, setEditedAuthor] = useState('');
@@ -32,6 +35,7 @@ function AdminHome() {
     const [editedDescription, setEditedDescription] = useState('');
     const [editedBookID, setEditedBookID] = useState('');
 
+    // declarations - edit patron details
     const [showPatronEditModal, setShowPatronEditModal] = useState(false);
     const [editedPatronName, setEditedPatronName] = useState('');
     const [editedPatronPhoneNumber, setEditedPatronPhoneNumber] = useState('');
@@ -42,6 +46,7 @@ function AdminHome() {
     useEffect(() => {
         if (bookDeleted) {
             setBookDeleted(false);
+            // fetch book list
             fetch('http://localhost:8081/admin-home-fetch-books').then(response => response.json())
                 .then(data => {
                     setBookItems(data);
@@ -50,6 +55,7 @@ function AdminHome() {
         }
         if (patronDeleted) {
             setPatronDeleted(false);
+            // fetch patron list
             fetch('http://localhost:8081/admin-home-fetch-patron').then(response => response.json())
                 .then(data => {
                     setPatronItems(data);
@@ -58,6 +64,7 @@ function AdminHome() {
         }
     }, [bookDeleted, patronDeleted]);
 
+    // method to delte book
     function deleteBook(id) {
         const isConfirmed = window.confirm('Are you sure you want to delete this book?');
         if (isConfirmed) {
@@ -71,6 +78,7 @@ function AdminHome() {
         }
     }
 
+    // method to delte patron
     function deletePatron(id) {
         const isConfirmed = window.confirm('Are you sure you want to delete this patron?');
         if (isConfirmed) {
@@ -84,6 +92,7 @@ function AdminHome() {
         }
     }
 
+    // method for book search
     const handleBookChange = (event) => {
         event.preventDefault();
         const inputSearchString = event.target.value;
@@ -97,6 +106,7 @@ function AdminHome() {
         setFilteredBookItems(filteredBooks);
     };
 
+    // method for patron search
     const handlePatronChange = (event) => {
         event.preventDefault();
         const inputSearchString = event.target.value;
@@ -109,6 +119,7 @@ function AdminHome() {
         setFilteredPatronItems(filteredPatrons);
     };
 
+    // set initial values to edit book
     const handleShowEditModal = (book) => {
         setEditedBookName(book.book_name);
         setEditedAuthor(book.author);
@@ -118,6 +129,7 @@ function AdminHome() {
         setShowEditModal(true);
     };
 
+    // set initial values to edit patron
     const handleShowPatronEditModal = (patron) => {
         setEditedPatronName(patron.name);
         setEditedPatronPhoneNumber(patron.phone_number);
@@ -127,11 +139,13 @@ function AdminHome() {
         setShowPatronEditModal(true);
     };
 
+    // close opened modal - for both books and patrons
     const handleCloseEditModal = () => {
         setShowEditModal(false);
         setShowPatronEditModal(false);
     };
 
+    // update book details
     const handleSaveEditedBook = () => {
         const updatedBookDetails = {
             id: editedBookID,
@@ -152,6 +166,7 @@ function AdminHome() {
             });
     };
 
+    // update patron details
     const handleSaveEditedPatron = () => {
         const updatedPatronDetails = {
             id: editedPatronID,
@@ -173,9 +188,9 @@ function AdminHome() {
             });
     };
 
-
     return (
         <div>
+            {/* admin home navbar */}
             <Navbar expand="lg" className="bg-body-tertiary" bg="dark" data-bs-theme="dark">
                 <Container fluid>
                     <Navbar.Brand href="#">Library Management</Navbar.Brand>
@@ -190,13 +205,16 @@ function AdminHome() {
                     </Navbar.Collapse>
                 </Container>
             </Navbar>
-            <Container className="pt-4">
 
+            {/* admin home body */}
+            <Container className="pt-4">
                 <Tabs defaultActiveKey="books_tab" transition={false} id="noanim-tab-example" className="mb-3">
+                    {/* books tab */}
                     <Tab eventKey="books_tab" title="Books">
                         <Tab.Container id="list-group-tabs-example" defaultActiveKey="#bookslink1">
                             <Row>
                                 <Col sm={6}>
+                                    {/* search bar for book */}
                                     <Form className="d-flex mt-2">
                                         <Form.Control
                                             type="search"
@@ -208,6 +226,7 @@ function AdminHome() {
                                         />
                                     </Form>
 
+                                    {/* display book or no books message */}
                                     {filteredBookItems.length > 0 ? (
                                         <ListGroup className='mt-3'>
                                             {filteredBookItems.map((item) => (
@@ -243,6 +262,8 @@ function AdminHome() {
                                         </ListGroup>
                                     }
                                 </Col>
+
+                                {/* book detailed view */}
                                 <Col sm={6}>
                                     <Tab.Content>
                                         {filteredBookItems.map((item) => (
@@ -264,6 +285,7 @@ function AdminHome() {
                                 </Col>
                             </Row>
 
+                            {/* edit book modal */}
                             <Modal show={showEditModal} onHide={handleCloseEditModal}>
                                 <Modal.Header closeButton>
                                     <Modal.Title>Edit Book Details</Modal.Title>
@@ -307,10 +329,12 @@ function AdminHome() {
                         </Tab.Container>
                     </Tab>
 
+                    {/* patron tab */}
                     <Tab eventKey="patrons_tab" title="Patrons">
                         <Tab.Container id="list-group-tabs-example" defaultActiveKey="#patronlink1">
                             <Row>
                                 <Col sm={6}>
+                                    {/* search bar for patrons */}
                                     <Form className="d-flex mt-2">
                                         <Form.Control
                                             type="search"
@@ -321,6 +345,8 @@ function AdminHome() {
                                             onChange={handlePatronChange}
                                         />
                                     </Form>
+
+                                    {/* display book or no books message */}
                                     {filteredPatronItems.length > 0 ? (
                                         <ListGroup className='mt-3'>
                                             {filteredPatronItems.map((item) => (
@@ -354,6 +380,8 @@ function AdminHome() {
                                     }
 
                                 </Col>
+
+                                {/* book detailed view */}
                                 <Col sm={6}>
                                     <Tab.Content>
                                         {filteredPatronItems.map((item) => (
@@ -376,13 +404,13 @@ function AdminHome() {
                                 </Col>
                             </Row>
 
+                            {/* edit patron modal */}
                             <Modal show={showPatronEditModal} onHide={handleCloseEditModal}>
                                 <Modal.Header closeButton>
                                     <Modal.Title>Edit Patron Details</Modal.Title>
                                 </Modal.Header>
                                 <Modal.Body>
                                     <Form>
-
                                         <Form.Group controlId="editedPatronName">
                                             <Form.Label>Patron Name</Form.Label>
                                             <Form.Control className="mb-3"
@@ -417,7 +445,6 @@ function AdminHome() {
                                     </Button>
                                 </Modal.Footer>
                             </Modal>
-
 
                         </Tab.Container>
                     </Tab>
