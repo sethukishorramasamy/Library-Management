@@ -74,7 +74,13 @@ function AddPatron() {
                                 {/* Form input for Phone Number */}
                                 <Form.Group className="mb-3" controlId="phone_number">
                                     <Form.Label>Phone Number <span className={styles.requiredfield}> *</span></Form.Label>
-                                    <Form.Control type="number" placeholder="Enter Phone Number" required />
+                                    <Form.Control
+                                        type="text"
+                                        placeholder="Enter Phone Number"
+                                        pattern="^[6-9]\d{9}$"
+                                        title="Please enter a valid 10-digit Indian phone number."
+                                        required
+                                    />
                                 </Form.Group>
                                 {/* Form input for Address */}
                                 <Form.Group className="mb-3" controlId="address">

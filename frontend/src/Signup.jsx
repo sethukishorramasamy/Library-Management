@@ -86,13 +86,25 @@ function Signup() {
                                 {/* Password */}
                                 <Form.Group className="mb-3" controlId="user_password">
                                     <Form.Label>Password <span className={styles.requiredfield}> *</span></Form.Label>
-                                    <Form.Control type="password" placeholder="Enter Password" required />
+                                    <Form.Control
+                                        type="password"
+                                        placeholder="Enter Password"
+                                        pattern="^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$"
+                                        title="Password must be at least 8 characters long, include one uppercase letter, one lowercase letter, one digit, and one special character."
+                                        required
+                                    />
                                 </Form.Group>
 
                                 {/* Confirm Password */}
                                 <Form.Group className="mb-3" controlId="user_confirm_password">
                                     <Form.Label>Confirm Password <span className={styles.requiredfield}> *</span></Form.Label>
-                                    <Form.Control type="password" placeholder="Enter Password again" required />
+                                    <Form.Control
+                                        type="password"
+                                        placeholder="Enter Password"
+                                        pattern="^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$"
+                                        title="Password must be at least 8 characters long, include one uppercase letter, one lowercase letter, one digit, and one special character."
+                                        required
+                                    />
                                 </Form.Group>
 
                                 {/* Submit Button */}

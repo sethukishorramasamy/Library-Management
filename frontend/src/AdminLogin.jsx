@@ -26,6 +26,7 @@ function AdminLogin() {
         axios.post('http://localhost:8081/admin-login', userDetails)
             .then((res) => {
                 // Checking if any users are found
+                console.log(res)
                 if (res.data.length > 0) {
                     // If users are found, navigate to the admin home page
                     navigate('/admin-home');
@@ -77,11 +78,20 @@ function AdminLogin() {
                                 </Form.Group>
 
                                 {/* Password Input */}
-                                <Form.Group className="mb-3" controlId="user_password">
+                                {/* <Form.Group className="mb-3" controlId="user_password">
                                     <Form.Label>Password <span className={styles.requiredfield}> *</span></Form.Label>
                                     <Form.Control type="password" placeholder="Enter Password" required />
+                                </Form.Group> */}
+                                <Form.Group className="mb-3" controlId="user_password">
+                                    <Form.Label>Password <span className={styles.requiredfield}> *</span></Form.Label>
+                                    <Form.Control
+                                        type="password"
+                                        placeholder="Enter Password"
+                                        pattern="^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$"
+                                        title="Password must be at least 8 characters long, include one uppercase letter, one lowercase letter, one digit, and one special character."
+                                        required
+                                    />
                                 </Form.Group>
-
                                 {/* Submit Button */}
                                 <Button variant="primary" type="submit">
                                     Login

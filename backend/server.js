@@ -55,15 +55,11 @@ app.post('/login',
 app.post('/admin-login',
     (req, res) => {
         const sql = "SELECT * FROM admin_login WHERE `email` = ? AND `password` = ?";
-        db.query(sql, [req.body.email, req.body.password], (err, data) => {
+        db.query(sql, [req.body.user_email, req.body.user_password], (err, data) => {
             if (err) {
-                return res.json("Error");
+                return res.json(err);
             }
-            if (data.length > 0) {
-                return res.json("Success");
-            } else {
-                return res.json("failed");
-            }
+            return res.json(data);
         });
     });
 
