@@ -57,7 +57,7 @@ function Signup() {
                         <Col md={3} className="mx-auto">
                             <div className="ms-2 me-auto text-center">
                                 <img
-                                    src="./images/add-books.png"
+                                    src="./images/signup.png"
                                     alt="add books"
                                     style={{
                                         height: "400px",
