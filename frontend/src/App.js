@@ -8,6 +8,7 @@ import AdminLogin from './AdminLogin'
 import AdminHome from './AdminHome'
 import AddBook from './AddBook'
 import AddPatron from './AddPatron'
+import PurchaseList from './PurchaseList'
 
 function App() {
   return (
@@ -21,6 +22,7 @@ function App() {
         <Route path='/admin-home' element={<AdminHome />}></Route>
         <Route path='/add-book' element={<AddBook />}></Route>
         <Route path='/add-patron' element={<AddPatron />}></Route>
+        <Route path='/purchase-list' element={<PurchaseList />}></Route>
       </Routes>
     </BrowserRouter>)
 }

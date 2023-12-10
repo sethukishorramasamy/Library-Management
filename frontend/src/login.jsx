@@ -1,5 +1,4 @@
 // imports
-import React from 'react';
 import axios from 'axios';
 import Container from 'react-bootstrap/Container';
 import Navbar from 'react-bootstrap/Navbar';
@@ -10,6 +9,7 @@ import Button from 'react-bootstrap/Button';
 import Form from 'react-bootstrap/Form';
 import styles from './Style.module.css';
 import { useNavigate } from 'react-router-dom';
+import React from 'react';
 
 function Login() {
 
@@ -31,6 +31,9 @@ function Login() {
                 // If user found, navigate to home page
                 if (res.data.length > 0) {
                     navigate('/home');
+                    localStorage.setItem('userId', res.data[0].id);
+                    localStorage.setItem('username', res.data[0].name);
+                    localStorage.setItem('email', res.data[0].email);
                 } else {
                     // If no users found, reset the form and show an alert
                     event.target.reset();

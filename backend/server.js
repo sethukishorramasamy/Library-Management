@@ -27,6 +27,18 @@ app.post('/signup', async (req, res) => {
     });
 });
 
+// add-to-purchase-list
+app.post('/add-to-purchase-list', async (req, res) => {
+    const sql = "INSERT INTO purchase_list (`book_name`, `author`, `ISBN`, `Description`, `user_id`) VALUES (?)";
+    const values = [req.body.book_name, req.body.author, req.body.isbn, req.body.description, req.body.user_id];
+    db.query(sql, [values], (err, data) => {
+        if (err) {
+            return res.json(err);
+        }
+        return res.json(data);
+    });
+});
+
 // add patron
 app.post('/add-patron', async (req, res) => {
     const sql = "INSERT INTO patron_list (`name`, `email`, `phone_number`, `address`) VALUES (?)";
@@ -144,6 +156,23 @@ app.put('/update-patron/:id', (req, res) => {
 //fetch book details
 app.get('/admin-home-fetch-books', (req, res) => {
     const sql = "SELECT * FROM book_list";
+    db.query(sql, [], (err, data) => {
+        if (err) {
+            return res.json(err);
+        }
+        const updatedData = data.map((item, index) => ({
+            ...item,
+            index: index + 1
+        }));
+        return res.json(updatedData);
+    });
+});
+
+
+//fetch book details
+app.get('/fetch-purchase-list', (req, res) => {
+    const userId = req.query.userId; // Change to use query parameters
+    const sql = `SELECT * FROM purchase_list WHERE user_id = ${userId}`;
     db.query(sql, [], (err, data) => {
         if (err) {
             return res.json(err);

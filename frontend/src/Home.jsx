@@ -11,12 +11,20 @@ import Badge from 'react-bootstrap/Badge';
 import React, { useState, useEffect } from 'react';
 import Tabs from 'react-bootstrap/Tabs';
 import Card from 'react-bootstrap/Card';
+import Button from 'react-bootstrap/Button';
+import { useNavigate } from 'react-router-dom';
+import axios from 'axios';
 
 function AdminHome() {
     // State for storing book data
     const [bookItems, setBookItems] = useState([]);
     const [filteredBookItems, setFilteredBookItems] = useState([]);
     const [bookSearchString, setBookSearchString] = useState('');
+    const navigate = useNavigate();
+
+    const [userName, setUserName] = useState('');
+    const [userEmail, setUserEmail] = useState('');
+    const [userId, setUserId] = useState('');
 
     // Fetch book data from the server on component mount
     useEffect(() => {
@@ -27,6 +35,11 @@ function AdminHome() {
                 setFilteredBookItems(data);
             })
             .catch(error => console.error('Error fetching data:', error));
+
+        // fetch logged user details
+        setUserName(localStorage.getItem('username'));
+        setUserEmail(localStorage.getItem('email'));
+        setUserId(localStorage.getItem('userId'));
     }, []);
 
     // Function to handle book search
@@ -54,6 +67,32 @@ function AdminHome() {
         setFilteredBookItems(filteredBooks);
     };
 
+    // logout and clear keys
+    function logout() {
+        navigate('/');
+        localStorage.removeItem('userId');
+        localStorage.removeItem('username');
+        localStorage.removeItem('email');
+    }
+
+    // Function to handle add to purchase list
+    const addToPurchaseList = (bookDetail) => {
+        // Extract user details from the form
+        const bookDetails = {
+            book_name: bookDetail.book_name,
+            author: bookDetail.author,
+            isbn: bookDetail.ISBN,
+            description: bookDetail.Description,
+            user_id: userId
+        };
+        axios
+            .post('http://localhost:8081/add-to-purchase-list', bookDetails)
+            .then((res) => {
+                alert('Added to Purchase List');
+            })
+            .catch((err) => alert('Failed to add book into Purchase list. Please try again later.'));
+    };
+
     return (
         <div>
             {/* Admin home navbar */}
@@ -63,7 +102,8 @@ function AdminHome() {
                     <Navbar.Toggle aria-controls="navbarScroll" />
                     <Navbar.Collapse id="navbarScroll">
                         <Nav className="justify-content-end flex-grow-1 pe-3">
-                            <Nav.Link href="/">Logout</Nav.Link>
+                            <Nav.Link href="/purchase-list">Purchase List</Nav.Link>
+                            <Nav.Link onClick={() => logout()}>Logout</Nav.Link>
                         </Nav>
                     </Navbar.Collapse>
                 </Container>
@@ -72,6 +112,16 @@ function AdminHome() {
 
             {/* List item */}
             <Container className="pt-4">
+                {/* logged in user details */}
+                <ListGroup className='mt-3 mb-3'>
+                    <ListGroup.Item variant="success" action className="d-flex justify-content-between align-items-start">
+                        <div className="ms-2 me-auto">
+                            <div>Logged in @ {userName} | {userEmail}</div>
+                        </div>
+                    </ListGroup.Item>
+                </ListGroup>
+
+                {/* tabs */}
                 <Tabs defaultActiveKey="books_tab" transition={false} id="noanim-tab-example" className="mb-3">
                     <Tab eventKey="books_tab" title="Books">
                         <Tab.Container id="list-group-tabs-example" defaultActiveKey="#bookslink1">
@@ -141,6 +191,7 @@ function AdminHome() {
                                                         <Card.Text>
                                                             <span className='text-muted'>Description:</span> {item.Description}
                                                         </Card.Text>
+                                                        <Button variant="outline-warning" onClick={() => addToPurchaseList(item)}>Add to Purchase List</Button>{' '}
                                                     </Card.Body>
                                                 </Card>
                                             </Tab.Pane>

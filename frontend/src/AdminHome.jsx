@@ -14,6 +14,7 @@ import Button from 'react-bootstrap/Button';
 import Card from 'react-bootstrap/Card';
 import axios from 'axios';
 import Modal from 'react-bootstrap/Modal';
+import { useNavigate } from 'react-router-dom';
 
 function AdminHome() {
 
@@ -42,6 +43,10 @@ function AdminHome() {
     const [editedPatronEmail, setEditedPatronEmail] = useState('');
     const [editedPatronAddress, setEditedPatronAddress] = useState('');
     const [editedPatronID, setEditedPatronID] = useState('');
+    const navigate = useNavigate();
+
+    const [userName, setUserName] = useState('');
+    const [userEmail, setUserEmail] = useState('');
 
     useEffect(() => {
         if (bookDeleted) {
@@ -62,6 +67,9 @@ function AdminHome() {
                     setFilteredPatronItems(data);
                 }).catch(error => console.error('Error fetching data:', error));
         }
+        // fetch logged user details
+        setUserName(localStorage.getItem('username'));
+        setUserEmail(localStorage.getItem('email'));
     }, [bookDeleted, patronDeleted]);
 
     // method to delte book
@@ -188,6 +196,14 @@ function AdminHome() {
             });
     };
 
+    // logout and clear keys
+    function logout() {
+        navigate('/');
+        localStorage.removeItem('userId');
+        localStorage.removeItem('username');
+        localStorage.removeItem('email');
+    }
+
     return (
         <div>
             {/* admin home navbar */}
@@ -199,8 +215,7 @@ function AdminHome() {
                         <Nav className="justify-content-end flex-grow-1 pe-3">
                             <Nav.Link href="/add-book">Add Book</Nav.Link>
                             <Nav.Link href="/add-patron">Add Patron</Nav.Link>
-                            <Nav.Link href="/">Logout</Nav.Link>
-
+                            <Nav.Link onClick={() => logout()}>Logout</Nav.Link>
                         </Nav>
                     </Navbar.Collapse>
                 </Container>
@@ -208,6 +223,17 @@ function AdminHome() {
 
             {/* admin home body */}
             <Container className="pt-4">
+
+                {/* logged in user details */}
+                <ListGroup className='mt-3 mb-3'>
+                    <ListGroup.Item variant="success" action className="d-flex justify-content-between align-items-start">
+                        <div className="ms-2 me-auto">
+                            <div>Logged in @ {userName} | {userEmail}</div>
+                        </div>
+                    </ListGroup.Item>
+                </ListGroup>
+
+                {/* tabs */}
                 <Tabs defaultActiveKey="books_tab" transition={false} id="noanim-tab-example" className="mb-3">
                     {/* books tab */}
                     <Tab eventKey="books_tab" title="Books">
@@ -450,6 +476,14 @@ function AdminHome() {
                     </Tab>
                 </Tabs>
             </Container>
+            {/* footer */}
+            <Navbar fixed="bottom" expand="lg" bg="light" variant="dark">
+                <Container className="text-center">
+                    <div style={{ width: '100%' }}>
+                        <p className='text-black'>Designed & Developed by Sethu Kishor</p>
+                    </div>
+                </Container>
+            </Navbar>
         </div>
     )
 }

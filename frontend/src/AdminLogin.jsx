@@ -30,6 +30,9 @@ function AdminLogin() {
                 if (res.data.length > 0) {
                     // If users are found, navigate to the admin home page
                     navigate('/admin-home');
+                    localStorage.setItem('userId', res.data[0].id);
+                    localStorage.setItem('username', res.data[0].name);
+                    localStorage.setItem('email', res.data[0].email);
                 } else {
                     // If no users are found, reset the form and show an alert
                     event.target.reset();
